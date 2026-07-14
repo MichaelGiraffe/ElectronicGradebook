@@ -1,0 +1,29 @@
+<h1><center>Конференции</center></h1>
+
+<% if false %>
+<% if @meetings.empty? %>
+    <p>Конференций нет</p>
+<% else %>
+    <div class="conferences-grid">
+
+        <% @meetings.each do |meeting| %>
+
+            <div class="conference-card">
+
+                <h2>
+                    Защита от <%= meeting.defense_date %>
+                </h2>
+
+                <p>
+                    Кабинет:
+                    <%= meeting.classroom %>
+                </p>
+
+            </div>
+
+        <% end %>
+
+    </div>
+
+<% end %>
+<% end %>

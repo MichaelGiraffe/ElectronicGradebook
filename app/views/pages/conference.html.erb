@@ -1,0 +1,227 @@
+<h1>Создание документа защиты</h1>
+
+
+<%= form_with url: conference_path, method: :post do %>
+    <p>ФИО студента: <%= text_field_tag :fio, @fio %></p>
+    <p>Тема: <%= text_field_tag :theme, @theme %></p>
+
+    <p>Председатель: <%= text_field_tag :host, @host %></p>
+    <p>Член ГЭК: <%= text_field_tag :GAK1, @GAK1 %></p>
+    <p>Член ГЭК: <%= text_field_tag :GAK2, @GAK2 %></p>
+    <p>Член ГЭК: <%= text_field_tag :GAK3, @GAK3 %></p>
+    <p>Секретарь ГЭК: <%= text_field_tag :secretary, @secretary %></p>
+
+    <p>Научный руководитель: <%= text_field_tag :teacher, @teacher %></p>
+    <p>Консультант: <%= text_field_tag :helper, @helper %></p>
+
+    <%= submit_tag "Создать документ" %>
+<% end %>
+
+
+
+<% if @fio!=nil and @fio!='' and @theme!=nil and @theme!='' and @teacher!=nil and @teacher!=''%>
+    <br>
+    <hr>
+    <h2>Предпросмотр документа</h2>
+    <hr>
+    <%#= Time.now.year %>
+    <b><center>№ Бланка __ (тут как вариант можно поставить id студента+n (костыль))</center></b>
+    <p align="right">Дата заседания ГЭК «<%= Time.now.day %>» <%= Time.now.strftime("%B") %> <%= Time.now.year %> г.</p>
+    <ol>
+        <b><li> ФИО ЗАЩИЩАЮЩЕГОСЯ (в родительном падеже) </li></b>
+        <%= @fio %>
+        <b><li> ТЕМА ВЫПУСКНОЙ КВАЛИФИКАЦИОННОЙ РАБОТЫ </li></b>
+        <%= @theme %>
+
+        <b><li> СОСТАВ ГОСУДАРСТВЕННОЙ ЭКЗАМЕНАЦИОННОЙ КОМИССИИ (ГЭК) </li></b>
+        <%# тут таблица %>
+        <table>
+            <%# заголовки %>
+            <thead>
+                <tr>
+                    <th>Статус</th>
+                    <th>ФИО</th>
+                </tr>
+            </thead>
+            <%# ячейки %>
+            <tbody>
+
+                <tr>
+                    <td>Председатель</td>
+                    <td><%= @host %></td>
+                </tr>
+
+                <tr>
+                    <td>Член ГЭК</td>
+                    <td><%= @GAK1 %></td>
+                </tr>
+
+                <tr>
+                    <td>Член ГЭК</td>
+                    <td><%= @GAK2 %></td>
+                </tr>
+
+                <tr>
+                    <td>Член ГЭК</td>
+                    <td><%= @GAK3 %></td>
+                </tr>
+
+                <tr>
+                    <td>Секретарь ГЭК</td>
+                    <td><%= @secretary %></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <b><li> РУКОВОДИТЕЛЬ И КОНСУЛЬТАНТ ВКР </li></b>
+        <%# тут таблица %>
+        <table>
+            <%# заголовки %>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>ФИО</th>
+                    <th>Должность</th>
+                    <th>Ученая степень, звание</th>
+                </tr>
+            </thead>
+
+            <%# ячейки %>
+            <tbody>
+                <tr>
+                    <td>Председатель</td>
+                    <td><%= @teacher %></td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+
+                <tr>
+                    <td>Председатель</td>
+                    <td><%= @helper %></td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <b><li> ОБЪЁМ РАБОТЫ </li></b>
+        <%# тут таблица %>
+        <table>
+            <%# ячейки %>
+            <tbody>
+                <tr>
+                    <td>Количество страниц ВКР</td>
+                    <td>...</td>
+                </tr>
+
+                <tr>
+                    <td>Количество страниц приложений</td>
+                    <td>...</td>
+                </tr>
+            </tbody>
+        </table>
+
+
+        <hr>
+        <b><center>ОБОРОТНАЯ СТОРОНА БЛАНКА</center></b>
+        <b><li> ВОПРОСЫ, ЗАДАННЫЕ ЧЛЕНАМИ ГЭК (реализую с добавлением бд, динамическая таблица!) </li></b>
+        <%# тут таблица должна быть динамической, но пока такой возможности нет%>
+        <table>
+            <%# заголовки %>
+            <thead>
+                <tr>
+                    <th>№</th>
+                    <th>Кто задал вопрос</th>
+                    <th>Содержание вопроса</th>
+                </tr>
+            </thead>
+
+            <%# ячейки %>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>ФИО</td>
+                    <td>...</td>
+                </tr>
+
+                <tr>
+                    <td>2</td>
+                    <td>ФИО</td>
+                    <td>...</td>
+                </tr>
+
+                <tr>
+                    <td>3</td>
+                    <td>ФИО</td>
+                    <td>...</td>
+                </tr>
+
+                <tr>
+                    <td>4</td>
+                    <td>ФИО</td>
+                    <td>...</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <b><li> ХАРАКТЕРИСТИКА ОТВЕТОВ ЗАЩИЩАЮЩЕГОСЯ (получше узнать как должно быть реализовано) </li></b>
+        <u>Что это вообще значит? Тут должны быть ответы которые он сказал или их описание что он молодец ответил на то-то?</u>
+
+        <b><li> РЕШЕНИЕ ГОСУДАРСТВЕННОЙ ЭКЗАМЕНАЦИОННОЙ КОМИССИИ </li></b>
+        <table>
+            <%# ячейки %>
+            <tbody>
+                <tr>
+                    <td>Оценка за защиту ВКР</td>
+                    <td>
+                        <input type="checkbox"> отлично
+                        <input type="checkbox"> хорошо
+                        <input type="checkbox"> удовлетворительно
+                        <input type="checkbox"> неудовлетворительно
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Присвоена квалификация (степень)</td>
+                    <td>
+                        <input type="checkbox"> бакалавр
+                        <input type="checkbox"> магистр
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Направление подготовки</td>
+                    <td>...</td>
+                </tr>
+
+                <tr>
+                    <td>Профиль (направленность)</td>
+                    <td>...</td>
+                </tr>
+                    <td>Диплом</td>
+                    <td>
+                    <input type="checkbox"> с отличием
+                    <input type="checkbox"> без отличия
+                    </td>
+                <tr>
+
+                </tr>
+            </tbody>
+        </table>
+    </ol>
+
+    <br>
+    <pre>
+        Председатель ГЭК: _______________________ /______________________/
+                                        (подпись)                           (ФИО)
+
+        Секретарь ГЭК:    _______________________ /______________________/
+                                        (подпись)                           (ФИО)
+    </pre>
+    <pre>
+        Дата: «<%= Time.now.day %>» <%= Time.now.strftime("%B") %> <%= Time.now.year %> г.
+    </pre>
+
+    <%= link_to "Скачать Word", download_document_path %>
+</div>
+<% end %>
