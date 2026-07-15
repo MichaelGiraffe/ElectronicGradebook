@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   get 'conference', to: 'pages#conference'
   post 'conference', to: 'pages#create'
   get 'conference/download', to: 'pages#download', as: 'download_document'
+  
+
 
   get 'accounts', to: 'pages#accounts'
   get 'contacts', to: 'pages#contacts'
