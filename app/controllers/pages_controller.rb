@@ -6,6 +6,9 @@ class PagesController < ApplicationController
     def conference
     end
 
+    def add_student
+    end
+
     def create
         @document_type = params[:document_type]
 

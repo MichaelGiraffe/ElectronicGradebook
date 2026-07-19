@@ -1,0 +1,20 @@
+<div class="auth-form">
+    <h2>Вход</h2>
+
+    <%= form_with url: login_path, method: :post, local: true do |f| %>
+
+        <%= f.label :email, "Email:" %>
+        <%= f.email_field :email, required: true %>
+
+        <%= f.label :password, "Пароль:" %>
+        <%= f.password_field :password, required: true %>
+
+        <%= f.button "Войти", type: :submit, class: "btn-submit" %>
+
+    <% end %>
+
+    <p style="margin-top: 15px; font-size: 14px; text-align: center;">
+        Еще не с нами?
+        <%= link_to "Регистрация", register_path, style: "color: #0000ee;" %>
+    </p>
+</div>

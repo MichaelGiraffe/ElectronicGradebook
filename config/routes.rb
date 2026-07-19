@@ -6,8 +6,13 @@ Rails.application.routes.draw do
   post 'conference', to: 'pages#create'
   get 'conference/download', to: 'pages#download', as: 'download_document'
   
+  get 'add_student', to: 'pages#add_student'
   get 'registration', to: 'users#new', as: :register
   post 'registration', to: 'users#create'
+  get    "/login",        to: "users#login"
+  post   "/login",        to: "users#authenticate"
+  get    "/profile",      to: "users#profile"
+  delete "/logout",   to: "users#logout"
 
   get 'accounts', to: 'pages#accounts'
   get 'contacts', to: 'pages#contacts'

@@ -19,16 +19,15 @@
                 </div>
                 <div class="login-form">
                     <% if session[:user_id] %>
-                        <span style="font-size: 14px;">Привет, <%= User.find(session[:user_id]).first_name %>!</span>
-                        <a href="/cart" style="margin-left: 10px; font-weight: bold; color: #ff8c00;">Корзина (<%= session[:cart]&.count || 0 %>)</a>
+                        <span style="font-size: 14px;">Привет, <%= current_user.first_name %>!</span>
                         <a href="/profile">Личный кабинет</a>
-                        <%= link_to "Выйти", logout_path, data: { "turbo-method": :delete }, style: "font-size: 12px; color: red;" %>
+                        <%= button_to "Выйти", logout_path, method: :delete %>
                     <% else %>
-                        <form action="/login" method="post">
-                            <input type="text" name="login" placeholder="Логин">
-                            <input type="password" name="password" placeholder="Пароль">
-                            <input type="submit" value="Войти">
-                        </form>
+                        <%= form_with url: login_path, method: :post, local: true do |f| %>
+                            <%= f.email_field :email, placeholder: "Email" %>
+                            <%= f.password_field :password, placeholder: "Пароль" %>
+                            <%= f.submit "Войти" %>
+                        <% end %>
                         <%= link_to "Регистрация", register_path, style: "font-size: 12px; color: #0000ee; margin-top: 5px;" %>
                     <% end %>
                 </div>
@@ -40,7 +39,8 @@
                 <div class="menu-links">
                     <a href="/">Главная</a>
                     <a href="/conference">Создать отчет</a>
-                    <a href="/accounts">Создать участника</a>
+                    <a href="/add_conference">Добавить конференцию</a>
+                    <a href="/add_student">Добавить студентов</a>
                     <a href="/contacts">Техподдержка</a>
                 </div>
                 <form class="search-form" action="/search" method="get">

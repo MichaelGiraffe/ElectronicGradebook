@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+    #registration
     def new
         @user = User.new
         render :registration
@@ -16,6 +17,34 @@ class UsersController < ApplicationController
             render :registration
         end
 
+    end
+
+    #autentification
+    def login
+
+    end
+
+    def authenticate
+        user = User.find_by(email: params[:email])
+
+        if user&.authenticate(params[:password])
+            session[:user_id] = user.id
+            flash[:success] = "Вы успешно вошли в систему."
+            redirect_to profile_path
+        else
+            flash[:alert] = "Неверный email или пароль."
+            render :login, status: :unprocessable_entity
+        end
+    end
+
+    def logout
+        session.delete(:user_id)
+        flash[:success] = "Вы вышли из системы."
+        redirect_to root_path
+    end
+
+    def profile
+        @user = User.find(session[:user_id])
     end
 
     private
