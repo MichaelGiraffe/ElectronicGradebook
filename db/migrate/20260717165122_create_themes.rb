@@ -1,7 +1,7 @@
 class CreateThemes < ActiveRecord::Migration[8.1]
   def change
     create_table :themes do |t|
-      t.string :theme
+      t.string :theme, null:false
       t.text :description
       t.integer :workpages
       t.integer :addpages
