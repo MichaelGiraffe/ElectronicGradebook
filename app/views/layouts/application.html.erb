@@ -19,7 +19,7 @@
                 </div>
                 <div class="login-form">
                     <% if session[:user_id] %>
-                        <span style="font-size: 14px;">Привет, <%= User.find(session[:user_id]).username %>!</span>
+                        <span style="font-size: 14px;">Привет, <%= User.find(session[:user_id]).first_name %>!</span>
                         <a href="/cart" style="margin-left: 10px; font-weight: bold; color: #ff8c00;">Корзина (<%= session[:cart]&.count || 0 %>)</a>
                         <a href="/profile">Личный кабинет</a>
                         <%= link_to "Выйти", logout_path, data: { "turbo-method": :delete }, style: "font-size: 12px; color: red;" %>
@@ -29,7 +29,7 @@
                             <input type="password" name="password" placeholder="Пароль">
                             <input type="submit" value="Войти">
                         </form>
-                        <a href="/register" style="font-size: 12px; color: #0000ee; margin-top: 5px;">Регистрация</a>
+                        <%= link_to "Регистрация", register_path, style: "font-size: 12px; color: #0000ee; margin-top: 5px;" %>
                     <% end %>
                 </div>
             </div>

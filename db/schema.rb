@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_19_095413) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_19_191119) do
   create_table "commission_members", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
@@ -126,7 +126,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_19_095413) do
     t.string "email", null: false
     t.string "first_name"
     t.string "last_name"
-    t.string "password", null: false
+    t.string "password_digest"
     t.string "patronymic"
     t.integer "role_id", null: false
     t.datetime "updated_at", null: false

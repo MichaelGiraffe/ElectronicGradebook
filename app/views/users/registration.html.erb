@@ -1,27 +1,35 @@
 <div class="auth-form">
   <h2 style="text-align: center; margin-bottom: 20px;">Регистрация</h2>
-  
+
   <%= form_with scope: :user, url: register_path, method: :post, local: true do |f| %>
-    <%= f.label :username, "Ваше имя:" %>
-    <%= f.text_field :username, placeholder: "Имя Фамилия", required: true %>
 
-    <%= f.label :phone, "Номер телефона:" %>
-    <%= f.telephone_field :phone, placeholder: "+7 (___) ___-__-__", required: true %>
+    <%= f.label :last_name, "Фамилия:" %>
+    <%= f.text_field :last_name, placeholder: "Иванов", required: true %>
 
-    <%= f.label :mail, "Электронная почта:" %>
-    <%= f.email_field :mail, placeholder: "example@mail.ru", required: true %>
+    <%= f.label :first_name, "Имя:" %>
+    <%= f.text_field :first_name, placeholder: "Иван", required: true %>
 
-    <%= f.label :password, "Придумайте пароль:" %>
-    <%= f.password_field :password, required: true %>
+    <%= f.label :patronymic, "Отчество:" %>
+    <%= f.text_field :patronymic, placeholder: "Иванович" %>
+
+    <%= f.label :email, "Электронная почта:" %>
+    <%= f.email_field :email, placeholder: "E-mail", required: true %>
+
+    <%= f.label :password, "Пароль:" %>
+    <%= f.password_field :password, placeholder: "Введите пароль", required: true %>
+
+    <%= f.label :password_confirmation, "Подтвердите пароль:" %>
+    <%= f.password_field :password_confirmation, placeholder: "Повторите пароль", required: true %>
 
     <div class="checkbox-group" style="margin: 15px 0; display: flex; align-items: flex-start; gap: 10px;">
       <%= f.check_box :policy, required: true, id: "policy" %>
       <label for="policy" style="font-size: 13px; line-height: 1.4;">
-        Я подтверждаю согласие на <strong>обработку персональных данных</strong> и принимаю 
-        <%= link_to "политику конфиденциальности", confident_path, style: "color: #0000ee;" %> нашего агентства.
+        Я подтверждаю согласие на <strong>обработку персональных данных</strong> и принимаю
+        <%= link_to "политику конфиденциальности", "#" %>
       </label>
     </div>
 
     <%= f.button "Создать аккаунт", type: :submit, class: "btn-submit", style: "width: 100%;" %>
+
   <% end %>
 </div>
