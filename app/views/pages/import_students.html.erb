@@ -1,0 +1,87 @@
+<h1 style="text-align: center; margin-bottom: 30px;">Импорт студентов из Excel</h1>
+
+<div class="product-box" style="padding: 30px;">
+
+    <%= form_with url: import_students_path,
+                  method: :post,
+                  multipart: true,
+                  local: true do |f| %>
+
+        <div style="margin-bottom: 20px;">
+            <%= f.label :file, "Выберите файл Excel (.xlsx):", style: "font-weight: bold;" %>
+            <br><br>
+            <%= f.file_field :file, accept: ".xlsx" %>
+        </div>
+
+        <%= f.submit "Предпросмотр", class: "btn-submit" %>
+
+    <% end %>
+
+</div>
+
+<% if @rows.present? %>
+
+    <h2 style="margin-top: 40px;">
+        Предпросмотр данных
+    </h2>
+
+    <div style="overflow-x: auto;">
+
+        <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width:100%; background:white;">
+
+            <thead style="background:#f0f0f0;">
+                <tr>
+                    <th>№</th>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Отчество</th>
+                    <th>Номер потока</th>
+                    <th>Студ. билет</th>
+                    <th>Группа</th>
+                    <th>Код направления</th>
+                    <th>Профиль</th>
+                    <th>Тема ВКР</th>
+                    <th>Руководитель</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <% @rows.each do |row| %>
+
+                    <tr>
+
+                        <% row.each do |cell| %>
+                            <td><%= cell %></td>
+                        <% end %>
+
+                    </tr>
+
+                <% end %>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <br>
+
+    <div style="display:flex; gap:15px;">
+
+        <button disabled
+                style="padding:10px 20px;
+                       background:#cccccc;
+                       border:none;
+                       cursor:not-allowed;">
+            Импортировать в БД
+        </button>
+
+        <%= link_to "Отмена",
+                    import_students_path,
+                    class: "btn-submit",
+                    style: "text-decoration:none; display:inline-block;" %>
+
+    </div>
+
+<% end %>

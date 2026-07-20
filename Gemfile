@@ -61,3 +61,4 @@ end
 
 #custom библиотеки
 gem 'docx'
+gem 'roo', '~>3.0'

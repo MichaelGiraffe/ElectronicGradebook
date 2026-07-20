@@ -4,7 +4,7 @@ class CreateStudents < ActiveRecord::Migration[8.1]
       t.string :last_name, null:false
       t.string :first_name, null:false
       t.string :patronymic
-      t.integer :thread
+      t.integer :thread#№ в потоке (например 09.03.03)
       t.string :student_num, null:false
       t.string :code, null:false
       t.string :profile, null:false

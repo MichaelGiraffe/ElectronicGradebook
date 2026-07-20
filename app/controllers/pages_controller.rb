@@ -100,6 +100,30 @@ class PagesController < ApplicationController
     end
 
 
+    #импорт .xlsx
+    def import_students
+    end
+
+    def import_students_create
+        file = params[:file]
+
+        if file.nil?
+            flash.now[:alert] = "Выберите файл."
+            render :import_students
+            return
+        end
+
+        xlsx = Roo::Excelx.new(file.path)
+
+        @rows = []
+
+        xlsx.each_row_streaming(offset: 2) do |row|
+            @rows << row.map { |cell| cell&.value }
+        end
+
+        render :import_students
+    end
+
     private
 
     def generate_doc

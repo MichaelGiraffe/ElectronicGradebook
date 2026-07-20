@@ -1,0 +1,70 @@
+<h1 style="text-align: center; margin: 40px 0; font-size: 2.5em; color: #000;">
+  Личный кабинет
+</h1>
+
+<div style="display: flex; gap: 40px; align-items: flex-start;">
+
+  <div style="flex: 4;">
+
+    <div class="product-box" style="margin-bottom: 30px; border: 1px solid #000; padding: 30px; background: #fff;">
+      <h2 style="margin-top: 0; margin-bottom: 25px;">Личные данные</h2>
+
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+
+        <div style="border-bottom: 1px solid #eee; padding-bottom: 10px;">
+          <label style="color:#7f8c8d; font-size:0.9em; display:block;">Фамилия</label>
+          <span><%= @user.last_name %></span>
+        </div>
+
+        <div style="border-bottom: 1px solid #eee; padding-bottom: 10px;">
+          <label style="color:#7f8c8d; font-size:0.9em; display:block;">Имя</label>
+          <span><%= @user.first_name %></span>
+        </div>
+
+        <% if @user.patronymic.present? %>
+          <div style="border-bottom: 1px solid #eee; padding-bottom: 10px;">
+            <label style="color:#7f8c8d; font-size:0.9em; display:block;">Отчество</label>
+            <span><%= @user.patronymic %></span>
+          </div>
+        <% end %>
+
+        <div style="border-bottom: 1px solid #eee; padding-bottom: 10px;">
+          <label style="color:#7f8c8d; font-size:0.9em; display:block;">Email</label>
+          <span><%= @user.email %></span>
+        </div>
+
+        <div style="border-bottom: 1px solid #eee; padding-bottom: 10px;">
+          <label style="color:#7f8c8d; font-size:0.9em; display:block;">Роль</label>
+          <span><%= @user.role.role %></span>
+        </div>
+
+        <div>
+          <label style="color:#7f8c8d; font-size:0.9em; display:block;">Пароль</label>
+          <span style="letter-spacing:3px;">••••••••</span>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="product-box" style="border:1px solid #000; padding:30px; background:#fff;">
+      <h2 style="margin-top:0; margin-bottom:25px;">О себе</h2>
+
+      <% if @user.about.present? %>
+        <p><%= @user.about %></p>
+      <% else %>
+        <p style="color:#7f8c8d;">
+          Вы ещё не заполнили информацию о себе.
+        </p>
+      <% end %>
+
+      <br>
+
+      <%= link_to "Редактировать профиль",
+                  "#",
+                  class: "btn-submit" %>
+
+    </div>
+
+  </div>
+
+</div>
