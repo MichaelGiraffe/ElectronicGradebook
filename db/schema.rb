@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_19_191119) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_22_203530) do
+  create_table "cafedras", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "commission_members", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "email"
@@ -21,6 +27,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_19_191119) do
     t.datetime "updated_at", null: false
     t.string "workplace"
     t.index ["meeting_id"], name: "index_commission_members_on_meeting_id"
+  end
+
+  create_table "completes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "percent"
+    t.integer "student_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["student_id"], name: "index_completes_on_student_id"
   end
 
   create_table "conf_members", force: :cascade do |t|
@@ -135,13 +149,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_19_191119) do
   end
 
   create_table "voevodas", force: :cascade do |t|
+    t.integer "cafedra_id", null: false
     t.datetime "created_at", null: false
     t.string "degree"
     t.string "fio"
     t.datetime "updated_at", null: false
+    t.index ["cafedra_id"], name: "index_voevodas_on_cafedra_id"
   end
 
   add_foreign_key "commission_members", "meetings"
+  add_foreign_key "completes", "students"
   add_foreign_key "conf_members", "conf_roles"
   add_foreign_key "conf_members", "conferences"
   add_foreign_key "conf_members", "users"
@@ -153,4 +170,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_19_191119) do
   add_foreign_key "students", "voevodas", column: "consultant_id"
   add_foreign_key "themes", "students"
   add_foreign_key "users", "roles"
+  add_foreign_key "voevodas", "cafedras"
 end

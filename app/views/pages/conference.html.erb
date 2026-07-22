@@ -6,7 +6,8 @@
     <%= select_tag :document_type,
     options_for_select([
         "ГОСТ",
-        "Протокол ГЭК"
+        "Протокол ГЭК",
+        "Шаблон"
     ],@document_type) %>
     <br></br>
     <%= select_tag :kind,
@@ -296,8 +297,115 @@
     <pre>Секретарь         _____________________________                           _____________________________</pre>
     <br></br>
     <%= link_to "Скачать Word", download_document_path %>
-<% end %>
 
+
+
+<% when "Шаблон"%>
+    <p align="right"> В Учебно-методическое управление </p>
+    <p align="right"> ФГБОУ ВО "МГТУ "СТАНКИН </p>
+    <center><b>Выписка из протоколов ГЭК</b></center>
+    <center><b>(граждане РФ и граждане, обучающиеся на условиях общего приема)</b></center>
+    <table>
+        <%# ячейки %>
+        <tbody>
+            <tr>
+                <td>Дата защиты</td>
+                <td><b><cur>календарь (из протокола)</cur></b></td>
+            </tr>
+            <tr>
+                <td>Кафедра(ы)</td>
+                <td><b><cur>Из БД (может быть несколько)</cur></b></td>
+            </tr>
+            <tr>
+                <td>Присвоена квалификация</td>
+                <td><b><cur>Из БД (бакалавр или магистр йода). Ну в бд пусть по 1 выступающему определяться и будет</cur></b></td>
+            </tr>
+            <tr>
+                <td>По направлению подготовки</td>
+                <td><b><cur>Из БД (че?)</cur></b></td>
+            </tr>
+            <tr>
+                <td>Председатель <br> (Фамилия И.О.)</td>
+                <td><b><cur>Из БД <%= @host %></cur></b></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table>
+        <%# заголовки %>
+        <thead>
+            <tr>
+                <th><center>№</center></th>
+                <th><center>Фамилия, имя, отчество</center></th>
+                <th><center>№<br>зачетной<br>книжки</center></th>
+                <th><center>№ протокола</center></th>
+                <th><center>Оценка</center></th>
+                <th><center>Дипл.<br>с<br>отлич.</center></th>
+                <th><center>Кафедра</center></th>
+            </tr>
+        </thead>
+
+        <%# ячейки %>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td><center>Из БД</center></td>
+                <td><center>Из БД</center></td>
+                <td><center>Из протокола</center></td>
+                <td><center>Из протокола</center></td>
+                <td><center>Из БД</center></td>
+                <td><center>Из БД</center></td>
+            </tr>
+
+            <tr>
+                <td>2</td>
+                <td><center>Из БД</center></td>
+                <td><center>Из БД</center></td>
+                <td><center>Из протокола</center></td>
+                <td><center>Из протокола</center></td>
+                <td><center>Из БД</center></td>
+                <td><center>Из БД</center></td>
+            </tr>
+
+            <tr>
+                <td>3</td>
+                <td><center>Из БД</center></td>
+                <td><center>Из БД</center></td>
+                <td><center>Из протокола</center></td>
+                <td><center>Из протокола</center></td>
+                <td><center>Из БД</center></td>
+                <td><center>Из БД</center></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="signature-block">
+        <div class="signature-row">
+            <span class="title">Директор ЕД</span>
+            <span class="line"><%= @nope %></span>
+            <span class="note">/ Из БД</span>
+        </div>
+
+        <div class="signature-row">
+            <span class="title">Заведующий кафедрой ИС</span>
+            <span class="line"><%= @nope %></span>
+            <span class="note">/ Из БД</span>
+        </div>
+
+        <div class="signature-row">
+            <span class="title">Заведующий кафедрой ПМ</span>
+            <span class="line"><%= @nope %></span>
+            <span class="note">/ Из БД</span>
+        </div>
+
+        <div class="signature-row">
+            <span class="title">Секретарь ГЭК</span>
+            <span class="line"><%= @secretary %></span>
+            <span class="note">/ Из БД</span>
+        </div>
+    </div>
+    <%= link_to "Скачать Word", download_document_path %>
+<% end %>
 
 
 

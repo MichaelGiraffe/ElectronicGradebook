@@ -302,3 +302,30 @@ pre {
     font-family: Arial, sans-serif;
     font-size: 14px;
 }
+
+.signature-block{
+    margin-top:40px;
+}
+
+.signature-row{
+    display:flex;
+    align-items:flex-end;
+    margin-bottom:18px;
+}
+
+.signature-row .title{
+    width:260px;
+    font-style:italic;
+}
+
+.signature-row .line{
+    flex:1;
+    border-bottom:1px solid black;
+    text-align:center;
+    margin:0 15px;
+    min-height:22px;
+}
+
+.signature-row .note{
+    width:180px;
+}
