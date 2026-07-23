@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_22_203530) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_23_113309) do
   create_table "cafedras", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
@@ -65,7 +65,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_22_203530) do
     t.datetime "created_at", null: false
     t.integer "grade"
     t.boolean "honors"
-    t.string "qualification"
     t.integer "student_id", null: false
     t.datetime "updated_at", null: false
     t.index ["student_id"], name: "index_grades_on_student_id"
@@ -102,9 +101,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_22_203530) do
     t.integer "consultant_id"
     t.datetime "created_at", null: false
     t.string "first_name"
+    t.string "group"
     t.string "last_name"
     t.string "patronymic"
     t.string "profile"
+    t.string "qualification"
     t.string "student_num"
     t.string "study_form"
     t.integer "thread"

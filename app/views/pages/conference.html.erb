@@ -298,8 +298,6 @@
     <br></br>
     <%= link_to "Скачать Word", download_document_path %>
 
-
-
 <% when "Шаблон"%>
     <p align="right"> В Учебно-методическое управление </p>
     <p align="right"> ФГБОУ ВО "МГТУ "СТАНКИН </p>
@@ -404,6 +402,9 @@
             <span class="note">/ Из БД</span>
         </div>
     </div>
+    <%= link_to "Скачать Word", download_document_path %>
+
+<% when "Отчет"%>
     <%= link_to "Скачать Word", download_document_path %>
 <% end %>
 

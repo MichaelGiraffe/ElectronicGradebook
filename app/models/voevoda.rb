@@ -1,6 +1,6 @@
 class Voevoda < ApplicationRecord
     belongs_to :cafedra
-    validates :fio, presence: true
+    validates :fio, presence: true, uniqueness: true
 
     has_many :students, foreign_key: :voevoda_id
 

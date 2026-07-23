@@ -9,6 +9,7 @@ class Student < ApplicationRecord
   validates :profile, presence: true
   validates :study_form, presence: true
   validates :voevoda, presence: true
+  validates :qualification, presence: true
 
   has_many :grades, dependent: :destroy
   has_one :theme, dependent: :destroy
