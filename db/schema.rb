@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_23_113309) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_24_112932) do
   create_table "cafedras", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
@@ -54,6 +54,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_23_113309) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "conference_students", force: :cascade do |t|
+    t.integer "conference_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "student_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conference_id"], name: "index_conference_students_on_conference_id"
+    t.index ["student_id"], name: "index_conference_students_on_student_id"
+  end
+
   create_table "conferences", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "date"
@@ -82,12 +91,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_23_113309) do
   create_table "questions", force: :cascade do |t|
     t.text "answer"
     t.integer "conf_member_id", null: false
+    t.integer "conference_student_id", null: false
     t.datetime "created_at", null: false
     t.text "question"
-    t.integer "student_id", null: false
     t.datetime "updated_at", null: false
     t.index ["conf_member_id"], name: "index_questions_on_conf_member_id"
-    t.index ["student_id"], name: "index_questions_on_student_id"
+    t.index ["conference_student_id"], name: "index_questions_on_conference_student_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -163,10 +172,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_23_113309) do
   add_foreign_key "conf_members", "conf_roles"
   add_foreign_key "conf_members", "conferences"
   add_foreign_key "conf_members", "users"
+  add_foreign_key "conference_students", "conferences"
+  add_foreign_key "conference_students", "students"
   add_foreign_key "grades", "students"
   add_foreign_key "meetings", "members", column: "members_id"
   add_foreign_key "questions", "conf_members"
-  add_foreign_key "questions", "students"
+  add_foreign_key "questions", "conference_students"
   add_foreign_key "students", "voevodas"
   add_foreign_key "students", "voevodas", column: "consultant_id"
   add_foreign_key "themes", "students"

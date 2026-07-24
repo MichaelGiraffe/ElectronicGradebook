@@ -49,7 +49,7 @@
 <% case @document_type %>
 <% when "ГОСТ" %>
     <%#= Time.now.year %>
-    <b><center>№ Бланка __ (тут как вариант можно поставить id студента+n (костыль))</center></b>
+    <b><center>№ Бланка __</center></b>
     <p align="right">Дата заседания ГЭК «<%= Time.now.day %>» <%= Time.now.strftime("%B") %> <%= Time.now.year %> г.</p>
     <ol>
         <b><li> ФИО ЗАЩИЩАЮЩЕГОСЯ (в родительном падеже) </li></b>
