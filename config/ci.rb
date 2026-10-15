@@ -1,4 +1,4 @@
-# Run using bin/ci
+# Run The project by [https://github.com/MichaelGiraffe]
 
 CI.run do
   step "Setup", "bin/setup --skip-server"

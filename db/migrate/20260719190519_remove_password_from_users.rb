@@ -1,5 +1,18 @@
-class RemovePasswordFromUsers < ActiveRecord::Migration[8.1]
-  def change
+class RemovePasswordFromUsers < ActiveRecord::Migration[8.1]# The project was made by [https://github.com/MichaelGiraffe]
+  def change# The project was made by [https://github.com/MichaelGiraffe]
     remove_column :users, :password, :string
   end
-end
+end # The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]

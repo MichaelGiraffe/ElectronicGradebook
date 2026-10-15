@@ -1,9 +1,10 @@
 class PagesController < ApplicationController
     def index
-        #@meetings = Meeting.all
+        @conferences = Conference.all
     end
 
     def conference
+        @conferences=Conference.all
     end
 
     def add_student
@@ -12,8 +13,7 @@ class PagesController < ApplicationController
     def create
         @document_type = params[:document_type]
 
-        
-
+        @conference = Conference.find(params[:conference_id])
         #тут примерно набросок профессий, потом заменю
         @fio = params[:fio]#фио студента
 
@@ -126,6 +126,73 @@ class PagesController < ApplicationController
         render :import_students
     end
 
+
+    def new_conference
+        @conference = Conference.new
+        @users = User.all
+        @conf_roles = ConfRole.all
+        @students = Student.all
+    end
+
+    def show_conference
+        @conference = Conference.includes(
+            conference_students: :student, 
+            conf_members: [:user, :conf_role]
+        ).find(params[:id])
+    end
+
+    def create_conference
+        @conference = Conference.new(conference_params)
+
+        if @conference.save
+            redirect_to root_path, notice: 'Конференция успешно создана!'
+        else
+            @users = User.all
+            @conf_roles = ConfRole.all
+            @students = Student.all
+            render :new_conference, status: :unprocessable_entity
+        end
+    end
+
+    def create_manual_student
+        student_params = params.require(:student).permit(
+            :last_name, 
+            :first_name, 
+            :patronymic, 
+            :student_num, 
+            :group, 
+            :code,          
+            :profile,
+            :study_form,
+            :qualification,
+            :voevoda_id
+        )
+
+        @student = Student.new(student_params)
+
+        if @student.save
+            if params[:student][:theme].present?
+            theme_val = params[:student][:theme]
+            
+            # Создаем или находим тему, передавая правильное поле :theme и привязку к студенту
+            Theme.find_or_create_by(theme: theme_val, student_id: @student.id)
+            end
+
+            redirect_to import_students_path, notice: "Студент и тема успешно добавлены в базу данных!"
+        else
+            redirect_to import_students_path, alert: "Ошибка сохранения студента: #{@student.errors.full_messages.to_sentence}"
+        end
+    end
+
+    def conference_params
+        params.require(:conference).permit(
+            :date, :room,
+            conf_members_attributes: [:id, :user_id, :conf_role_id, :_destroy],
+            student_ids: []
+        )
+    end
+
+
     private
 
     def generate_doc
@@ -187,4 +254,5 @@ class PagesController < ApplicationController
 
         doc
     end
+
 end

@@ -3,17 +3,18 @@
 
 # This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
 # docker build -t electronic_gradebook .
+# The project was made by [https://github.com/MichaelGiraffe]
 # docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name electronic_gradebook electronic_gradebook
 
 # For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
-
+# The project was made by [https://github.com/MichaelGiraffe]
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 ARG RUBY_VERSION=4.0.0
 FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
 WORKDIR /rails
-
+# The project was made by [https://github.com/MichaelGiraffe]
 # Install base packages
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libjemalloc2 libvips sqlite3 && \
@@ -41,14 +42,14 @@ COPY Gemfile Gemfile.lock ./
 
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    # -j 1 disable parallel compilation to avoid a QEMU bug: https://github.com/rails/bootsnap/issues/495
+    # -j 1 disable parallel compilation to avoid a QEMU bug: https://github.com/MichaelGiraffe
     bundle exec bootsnap precompile -j 1 --gemfile
 
 # Copy application code
 COPY . .
 
 # Precompile bootsnap code for faster boot times.
-# -j 1 disable parallel compilation to avoid a QEMU bug: https://github.com/rails/bootsnap/issues/495
+# -j 1 disable parallel compilation to avoid a QEMU bug: https://github.com/MichaelGiraffe
 RUN bundle exec bootsnap precompile -j 1 app/ lib/
 
 # Adjust binfiles to be executable on Linux
@@ -76,7 +77,7 @@ COPY --chown=rails:rails --from=build /rails /rails
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
+# The project was made by [https://github.com/MichaelGiraffe]
 # Start server via Thruster by default, this can be overwritten at runtime
 EXPOSE 80
 CMD ["./bin/thrust", "./bin/rails", "server"]

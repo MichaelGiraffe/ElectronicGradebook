@@ -1,0 +1,86 @@
+<h1><center>Создание конференции</center></h1>
+
+<%= form_with model: @conference, url: create_conference_path, local: true do |f| %>
+  <% if @conference.errors.any? %>
+    <div id="error_explanation" style="color: red;">
+      <h2>Ошибки при сохранении:</h2>
+      <ul>
+        <% @conference.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div style="margin-bottom: 15px;">
+    <%= f.label :date, "Дата и время защиты" %><br>
+    <%= f.datetime_local_field :date %>
+  </div>
+
+  <div style="margin-bottom: 15px;">
+    <%= f.label :room, "Кабинет" %><br>
+    <%= f.text_field :room %>
+  </div>
+
+  
+  <h3>Участники ВКР (Комиссия, секретари, председатели)</h3>
+
+<div id="conf-members-container">
+  <%= f.fields_for :conf_members do |member_form| %>
+    <div class="member-field-row" style="margin-bottom: 10px; display: flex; gap: 10px; align-items: center;">
+      <%= member_form.collection_select :user_id, @users, :id, ->(u) { "#{u.last_name} #{u.first_name}" }, { prompt: "Выберите сотрудника" }, { style: "padding: 5px;" } %>
+      <%= member_form.collection_select :conf_role_id, @conf_roles, :id, :role, { prompt: "Выберите роль" }, { style: "padding: 5px;" } %>
+      <button type="button" onclick="this.parentElement.remove();" style="background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Удалить</button>
+    </div>
+  <% end %>
+</div>
+
+<button type="button" id="add-member-btn" style="background: #4CAF50; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">+ Добавить участника</button>
+
+<!-- the project was made by [https://github.com/MichaelGiraffe] -->
+<script>
+  document.getElementById('add-member-btn').addEventListener('click', function() {
+    const container = document.getElementById('conf-members-container');
+    const timestamp = new Date().getTime(); // Уникальный индекс для сильных параметров Rails
+    
+    const newRow = document.createElement('div');
+    newRow.className = 'member-field-row';
+    newRow.style.cssText = 'margin-bottom: 10px; display: flex; gap: 10px; align-items: center;';
+    
+    newRow.innerHTML = `
+      <select name="conference[conf_members_attributes][${timestamp}][user_id]" style="padding: 5px;">
+        <option value="">Выберите сотрудника</option>
+        <% @users.each do |u| %>
+          <option value="<%= u.id %>"><%= u.last_name %> <%= u.first_name %></option>
+        <% end %>
+      </select>
+      
+      <select name="conference[conf_members_attributes][${timestamp}][conf_role_id]" style="padding: 5px;">
+        <option value="">Выберите роль</option>
+        <% @conf_roles.each do |r| %>
+          <option value="<%= r.id %>"><%= r.role %></option>
+        <% end %>
+      </select>
+      
+      <button type="button" onclick="this.parentElement.remove();" style="background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Удалить</button>
+    `;
+    
+    container.appendChild(newRow);
+  });
+</script>
+
+  <h3>Студенты, участвующие в конференции</h3>
+    <div style="max-height: 280px; overflow-y: auto; border: 1px solid #ccc; background: #fff; padding: 12px; border-radius: 6px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);">
+    <% @students.each do |st| %>
+        <div style="display: flex; align-items: center; padding: 6px 8px; margin-bottom: 4px; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='#f1f3f5'" onmouseout="this.style.background='transparent'">
+        <!-- the project was made by [https://github.com/MichaelGiraffe] -->
+        <%= check_box_tag "conference[student_ids][]", st.id, @conference.student_ids.include?(st.id), id: "student_#{st.id}", style: "width: 16px; height: 16px; cursor: pointer; margin-right: 10px;" %>
+        <%= label_tag "student_#{st.id}", "#{st.last_name} #{st.first_name} (Группа: #{st.group})", style: "cursor: pointer; width: 100%; font-size: 14px; color: #333;" %>
+        </div>
+    <% end %>
+  </div>
+
+  <div style="margin-top: 20px;">
+    <%= f.submit "Создать конференцию", class: "btn btn-primary", style: "padding: 10px 20px; font-size: 16px;" %>
+  </div>
+<% end %>

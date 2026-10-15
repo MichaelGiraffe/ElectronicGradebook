@@ -47,9 +47,29 @@ class UsersController < ApplicationController
         @user = User.find(session[:user_id])
     end
 
+    #editing profile
+    def edit
+        @user = User.find(session[:user_id])
+    end
+
+    def update
+        @user = User.find(session[:user_id])
+
+        if @user.update(profile_params)
+            flash[:success] = "Профиль успешно обновлён."
+            redirect_to profile_path
+        else
+            render :edit, status: :unprocessable_entity
+        end
+    end
+
     private
 
     def user_params
         params.require(:user).permit(:first_name, :last_name, :patronymic, :about, :password, :email)
+    end
+
+    def profile_params
+        params.require(:user).permit(:first_name,:last_name,:patronymic,:about,:email,:password,:password_confirmation)
     end
 end

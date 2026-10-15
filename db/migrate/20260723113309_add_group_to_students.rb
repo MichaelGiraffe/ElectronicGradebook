@@ -1,5 +1,6 @@
 class AddGroupToStudents < ActiveRecord::Migration[8.1]
-  def change
-    add_column :students, :group, :string
-  end
-end
+  def change# The project was made by [https://github.com/MichaelGiraffe]
+    add_column :students, :group, :string# The project was made by [https://github.com/MichaelGiraffe]
+  end# The project was made by [https://github.com/MichaelGiraffe]
+end# The project was made by [https://github.com/MichaelGiraffe]
+# The project was made by [https://github.com/MichaelGiraffe]

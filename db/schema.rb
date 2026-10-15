@@ -47,7 +47,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_112932) do
     t.index ["conference_id"], name: "index_conf_members_on_conference_id"
     t.index ["user_id"], name: "index_conf_members_on_user_id"
   end
-
+  # The project was made by [https://github.com/MichaelGiraffe]
   create_table "conf_roles", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "role"
@@ -143,7 +143,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_112932) do
     t.integer "workpages"
     t.index ["student_id"], name: "index_themes_on_student_id"
   end
-
+  # The project was made by [https://github.com/MichaelGiraffe]
   create_table "users", force: :cascade do |t|
     t.text "about"
     t.datetime "created_at", null: false
@@ -183,4 +183,4 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_24_112932) do
   add_foreign_key "themes", "students"
   add_foreign_key "users", "roles"
   add_foreign_key "voevodas", "cafedras"
-end
+end# The project was made by [https://github.com/MichaelGiraffe]

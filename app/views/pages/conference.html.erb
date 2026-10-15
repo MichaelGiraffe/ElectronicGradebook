@@ -1,7 +1,10 @@
 <h1>Создание документа защиты</h1>
 
 
-<%= form_with url: conference_path, method: :post do %>
+<%= form_with url: conference_path, method: :post do  |f| %>
+
+
+    <%= f.collection_select :conference_id, Conference.all, :id, :date %>
 
     <%= select_tag :document_type,
     options_for_select([
@@ -52,7 +55,7 @@
     <b><center>№ Бланка __</center></b>
     <p align="right">Дата заседания ГЭК «<%= Time.now.day %>» <%= Time.now.strftime("%B") %> <%= Time.now.year %> г.</p>
     <ol>
-        <b><li> ФИО ЗАЩИЩАЮЩЕГОСЯ (в родительном падеже) </li></b>
+        <b><li> ФИО ЗАЩИЩАЮЩЕГОСЯ</li></b>
         <%= @fio %>
         <b><li> ТЕМА ВЫПУСКНОЙ КВАЛИФИКАЦИОННОЙ РАБОТЫ </li></b>
         <%= @theme %>
@@ -72,27 +75,19 @@
 
                 <tr>
                     <td>Председатель</td>
-                    <td><%= @host %></td>
+                    <td><%= "#{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Председатель"))&.user&.last_name} #{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Председатель"))&.user&.first_name} #{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Председатель"))&.user&.patronymic}" %></td>
                 </tr>
 
-                <tr>
-                    <td>Член ГЭК</td>
-                    <td><%= @GAK1 %></td>
-                </tr>
-
-                <tr>
-                    <td>Член ГЭК</td>
-                    <td><%= @GAK2 %></td>
-                </tr>
-
-                <tr>
-                    <td>Член ГЭК</td>
-                    <td><%= @GAK3 %></td>
-                </tr>
+                <% @conference.conf_members.joins(:conf_role).where(conf_roles: { role: "Член ГЭК" }).each do |gak| %>
+                    <tr>
+                        <td>Член ГЭК</td>
+                        <td><%= gak.user&.last_name %></td>
+                    </tr>
+                <% end %>
 
                 <tr>
                     <td>Секретарь ГЭК</td>
-                    <td><%= @secretary %></td>
+                    <td><%= "#{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Секретарь"))&.user&.last_name} #{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Секретарь"))&.user&.first_name} #{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Секретарь"))&.user&.patronymic}" %></td>
                 </tr>
             </tbody>
         </table>
@@ -328,7 +323,8 @@
             </tr>
         </tbody>
     </table>
-
+    
+    
     <table>
         <%# заголовки %>
         <thead>
@@ -374,6 +370,14 @@
                 <td><center>Из БД</center></td>
                 <td><center>Из БД</center></td>
             </tr>
+
+            <% @conference.conference_students.each do |student| %>
+                <tr>
+                    <td>Student</td>
+                    <td><center><%= student.student&.last_name %> <%= student.student&.first_name %> <%= student.student&.patronymic %></center></td>
+                    <td><center><%= student.student&.student_num %></center></td>
+                </tr>
+            <% end %>
         </tbody>
     </table>
 

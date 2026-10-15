@@ -1,11 +1,13 @@
-<h1 style="text-align: center; margin-bottom: 30px;">Импорт студентов из Excel</h1>
+<h1 style="text-align: center; margin-bottom: 30px;">Добавление и импорт студентов</h1>
 
-<div class="product-box" style="padding: 30px;">
+<!-- the project was made by [https://github.com/MichaelGiraffe] -->
+<div class="product-box" style="padding: 30px; margin-bottom: 30px;">
+    <h2>Импорт из Excel</h2>
 
     <%= form_with url: import_students_path,
-                  method: :post,
-                  multipart: true,
-                  local: true do |f| %>
+                method: :post,
+                multipart: true,
+                local: true do |f| %>
 
         <div style="margin-bottom: 20px;">
             <%= f.label :file, "Выберите файл Excel (.xlsx):", style: "font-weight: bold;" %>
@@ -19,6 +21,63 @@
 
 </div>
 
+<!-- the project was made by [https://github.com/MichaelGiraffe] -->
+<div class="product-box" style="padding: 30px; margin-bottom: 30px;">
+    <h2>Ручной ввод студента</h2>
+
+    <%= form_with url: create_manual_student_path, method: :post, local: true do |f| %>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+            <div>
+                <%= label_tag :last_name, "Фамилия" %><br>
+                <%= text_field_tag "student[last_name]", nil, style: "width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" %>
+            </div>
+            <div>
+                <%= label_tag :first_name, "Имя" %><br>
+                <%= text_field_tag "student[first_name]", nil, style: "width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" %>
+            </div>
+            <div>
+                <%= label_tag :patronymic, "Отчество" %><br>
+                <%= text_field_tag "student[patronymic]", nil, style: "width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" %>
+            </div>
+            <div>
+                <%= label_tag :student_num, "Студ. билет" %><br>
+                <%= text_field_tag "student[student_num]", nil, style: "width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" %>
+            </div>
+            <div>
+                <%= label_tag :group, "Группа" %><br>
+                <%= text_field_tag "student[group]", nil, style: "width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" %>
+            </div>
+            <div>
+                <%= label_tag :code, "Код направления (например, 09.03.03)" %><br>
+                <%= text_field_tag "student[code]", nil, style: "width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" %>
+            </div>
+            <div>
+                <%= label_tag :profile, "Профиль" %><br>
+                <%= text_field_tag "student[profile]", nil, style: "width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" %>
+            </div>
+            <div>
+                <%= label_tag :study_form, "Форма обучения (очная / заочная)" %><br>
+                <%= text_field_tag "student[study_form]", nil, style: "width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" %>
+            </div>
+            <div>
+                <%= label_tag :qualification, "Квалификация (Бакалавр / Магистр)" %><br>
+                <%= text_field_tag "student[qualification]", nil, style: "width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" %>
+            </div>
+            <div>
+                <%= label_tag :theme, "Тема ВКР" %><br>
+                <%= text_field_tag "student[theme]", nil, style: "width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;" %>
+            </div>
+            <div style="grid-column: span 2;">
+                <%= label_tag :voevoda_id, "Научный руководитель" %><br>
+                <%= collection_select :student, :voevoda_id, Voevoda.all, :id, lambda { |v| v.try(:fio) || v.try(:name) || v.try(:title) || v.try(:last_name) || "Руководитель ##{v.id}" }, { prompt: "Выберите руководителя" }, { style: "width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px; background: white;" } %>
+            </div>
+        </div>
+
+        <%= submit_tag "Добавить студента в БД", class: "btn-submit" %>
+    <% end %>
+</div>
+
+<!-- the project was made by [https://github.com/MichaelGiraffe] -->
 <% if @rows.present? %>
 
     <h2 style="margin-top: 40px;">

@@ -1,29 +1,30 @@
 <h1><center>Конференции</center></h1>
 
-<%if false %>
-<% if @meetings.empty? %>
+<% if @conferences.empty? %>
     <p>Конференций нет</p>
 <% else %>
     <div class="conferences-grid">
 
-        <% @meetings.each do |meeting| %>
+        <% @conferences.each do |conference| %>
 
-            <div class="conference-card">
+            <div class="conference-card" style="border: 1px solid #ccc; background: #fff; padding: 15px; margin-bottom: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
 
                 <h2>
-                    Защита от <%= meeting.defense_date %>
+                    Защита от <%= conference.date.strftime("%d.%m.%Y %H:%M") %>
                 </h2>
 
                 <p>
-                    Кабинет:
-                    <%= meeting.classroom %>
+                    Кабинет: <%= conference.room %>
                 </p>
+
+                <!-- the project was made by [https://github.com/MichaelGiraffe] -->
+                <div style="margin-top: 10px;">
+                    <%= link_to "Открыть конференцию", conference_detail_path(conference), class: "btn btn-primary", style: "display: inline-block; background: #007bff; color: white; padding: 6px 12px; border-radius: 4px; text-decoration: none;" %>
+                </div>
 
             </div>
 
         <% end %>
 
     </div>
-
-<% end %>
 <% end %>

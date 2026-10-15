@@ -1,0 +1,591 @@
+<!-- Основная карточка с информацией о конференции -->
+<div style="max-width: 800px; margin: 20px auto; padding: 20px; background: #fff; border: 1px solid #ccc; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+  <h1 style="margin-top: 0; text-align: center;">Автозаполнение отчета</h1>
+
+  <!-- Основная информация -->
+  <div style="margin-bottom: 20px; padding: 15px; background: #f8f9fa; border-radius: 6px;">
+    <h3 style="margin-top: 0;">Дата и место проведения</h3>
+    <p><strong>Дата и время:</strong> <%= @conference.date&.strftime("%d.%m.%Y %H:%M") %></p>
+    <p><strong>Кабинет:</strong> <%= @conference.room %></p>
+  </div>
+
+  <!-- the project was made by [https://github.com/MichaelGiraffe] -->
+  <div style="margin-bottom: 20px;">
+    <h3>Члены комиссии (ВКР)</h3>
+    <% if @conference.conf_members.empty? %>
+      <p style="color: #666;">Участники не назначены.</p>
+    <% else %>
+      <ul style="padding-left: 20px;">
+        <% @conference.conf_members.each do |member| %>
+          <li style="margin-bottom: 4px;">
+            <strong><%= member.user&.last_name %> <%= member.user&.first_name %></strong> — 
+            <span style="color: #555;"><%= member.conf_role&.role %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+
+  <!-- the project was made by [https://github.com/MichaelGiraffe] -->
+  <div style="margin-bottom: 10px;">
+    <h3>Студенты, защищающие работы</h3>
+    <% if @conference.conference_students.empty? %>
+      <p style="color: #666;">Студенты не привязаны к этой конференции.</p>
+    <% else %>
+      <ul style="padding-left: 20px;">
+        <% @conference.conference_students.each do |cs| %>
+          <li style="margin-bottom: 4px;">
+            <%= cs.student&.last_name %> <%= cs.student&.first_name %> (Группа: <%= cs.student&.group %>, Студенческий: <%= cs.student&.student_num %>)
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+</div>
+
+<!-- the project was made by [https://github.com/MichaelGiraffe] -->
+<div style="max-width: 800px; margin: 20px auto; padding: 20px;">
+  <hr style="margin: 20px 0;">
+  
+  <h2>Генерация документов</h2>
+
+    <!-- Выбор типа документа и номера бланка в одной форме -->
+    <%= form_with url: conference_detail_path(@conference), method: :get, local: true, html: { style: "margin-bottom: 20px;" } do |f| %>
+        <div style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap;">
+        <div>
+            <label><strong>Тип документа:</strong></label><br>
+            <%= select_tag :document_type, options_for_select(["ГОСТ", "Протокол ГЭК", "Шаблон"], params[:document_type]), class: "form-control", style: "padding: 6px; border-radius: 4px; border: 1px solid #ccc;", onchange: "this.form.submit();" %>
+        </div>
+
+        <!-- the project was made by [https://github.com/MichaelGiraffe] -->
+        <div>
+            <label><strong>Студент:</strong></label><br>
+            <%= select_tag :student_id, 
+                options_from_collection_for_select(@conference.conference_students.includes(:student).map(&:student), :id, ->(s) { "#{s.last_name} #{s.first_name} (#{s.group})" }, params[:student_id]), 
+                prompt: "Выберите студента", 
+                style: "padding: 6px; border-radius: 4px; border: 1px solid #ccc;", 
+                onchange: "this.form.submit();" %>
+        </div>
+
+        <div>
+            <label><strong>Номер бланка:</strong></label><br>
+            <%= text_field_tag :blank_number, params[:blank_number], placeholder: "Введите номер бланка", style: "padding: 6px; border-radius: 4px; border: 1px solid #ccc;" %>
+        </div>
+        
+        <div style="align-self: flex-end;">
+            <%= submit_tag "Обновить предпросмотр", class: "btn btn-primary", style: "padding: 6px 12px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;" %>
+        </div>
+        </div>
+    <% end %>
+
+  <br>
+  <hr>
+  <h2>Предпросмотр документа</h2>
+  <hr>
+  <br>
+
+  <% doc_type = params[:document_type] || "ГОСТ" %>
+  <% blank_num = params[:blank_number].presence || "__" %>
+
+  <% selected_cs = if params[:student_id].present? 
+        @conference.conference_students.find_by(student_id: params[:student_id])
+      else
+        @conference.conference_students.first
+      end 
+  %>
+
+  <% case doc_type %>
+  <% when "ГОСТ" %>
+    <% if selected_cs.nil? %>
+      <p style="color: red;">Пожалуйста, выберите студента из списка выше для предпросмотра ГОСТа.</p>
+    <% else %>
+      <% cs = selected_cs %>
+      
+      <b><center>№ Бланка <%= params[:blank_number].presence || "__" %></center></b>
+      <p align="right">Дата заседания ГЭК «<%= @conference.date&.day %>» <%= @conference.date&.strftime("%B") %> <%= @conference.date&.year %> г.</p>
+      
+      <ol>
+          <div style="margin-bottom: 25px; border-bottom: 1px solid #ccc; padding-bottom: 15px;">
+              <b><li> ФИО ЗАЩИЩАЮЩЕГОСЯ</li></b>
+              <%= cs.student&.try(:genitive_fio) || "#{cs.student&.last_name} #{cs.student&.first_name} #{cs.student&.patronymic}" %>
+              
+              <b><li> ТЕМА ВЫПУСКНОЙ КВАЛИФИКАЦИОННОЙ РАБОТЫ </li></b>
+              <%= cs.student&.theme&.theme || "Тема не указана" %>
+              
+              <b><li> СОСТАВ ГОСУДАРСТВЕННОЙ ЭКЗАМЕНАЦИОННОЙ КОМИССИИ (ГЭК) </li></b>
+              <table>
+                  <thead>
+                      <tr>
+                          <th>Статус</th>
+                          <th>ФИО</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>Председатель</td>
+                          <td><%= 
+                              chair = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Председатель" })
+                              chair ? "#{chair.user&.last_name} #{chair.user&.first_name} #{chair.user&.patronymic}" : "Не назначен"
+                          %></td>
+                      </tr>
+
+                      <% @conference.conf_members.joins(:conf_role).where(conf_roles: { role: ["Член ГЭК", "Член комиссии"] }).each do |gak| %>
+                          <tr>
+                              <td>Член ГЭК</td>
+                              <td><%= gak.user&.last_name %> <%= gak.user&.first_name %> <%= gak.user&.patronymic %></td>
+                          </tr>
+                      <% end %>
+
+                      <tr>
+                          <td>Секретарь ГЭК</td>
+                          <td><%= 
+                              sec = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Секретарь" })
+                              sec ? "#{sec.user&.last_name} #{sec.user&.first_name} #{sec.user&.patronymic}" : "Не назначен"
+                          %></td>
+                      </tr>
+                  </tbody>
+              </table>
+
+            <b><li> РУКОВОДИТЕЛЬ И КОНСУЛЬТАНТ ВКР </li></b>
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>ФИО</th>
+                        <th>Должность</th>
+                        <th>Ученая степень, звание</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Руководитель</td>
+                        <td>
+                            <%= cs.student&.voevoda&.fio || "Руководитель не указан" %>
+                        </td>
+                        <td>
+                            <%= cs.student&.voevoda&.try(:position) || "..." %>
+                        </td>
+                        <td>
+                            <%= cs.student&.voevoda&.try(:degree) || "..." %>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Консультант</td>
+                        <td>
+                            <%= cs.student&.consultant&.fio || "Консультант не указан" %>
+                        </td>
+                        <td>
+                            <%= cs.student&.consultant&.try(:position) || "..." %>
+                        </td>
+                        <td>
+                            <%= cs.student&.consultant&.try(:degree) || "..." %>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+              <b><li> ОБЪЁМ РАБОТЫ </li></b>
+              <table>
+                  <tbody>
+                      <tr>
+                          <td>Количество страниц ВКР</td>
+                          <td><%= cs.student&.try(:main_list) || cs.student&.try(:pages) || cs.student&.try(:work_pages) || "..." %></td>
+                      </tr>
+                      <tr>
+                          <td>Количество страниц приложений</td>
+                          <td><%= cs.student&.try(:add_list) || cs.student&.try(:app_pages) || cs.student&.try(:applications_pages) || "..." %></td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+      </ol>
+
+      <hr>
+      <b><center>ОБОРОТНАЯ СТОРОНА БЛАНКА</center></b>
+      <b><li> ВОПРОСЫ, ЗАДАННЫЕ ЧЛЕНАМИ ГЭК </li></b>
+      <table id="questions-table" style="width: 100%; border-collapse: collapse; margin-top: 5px;">
+          <thead>
+              <tr style="background: #f1f3f5;">
+                  <th style="border: 1px solid #ccc; padding: 5px; width: 40px; text-align: center;">№</th>
+                  <th style="border: 1px solid #ccc; padding: 5px; text-align: left;">Кто задал вопрос</th>
+                  <th style="border: 1px solid #ccc; padding: 5px; text-align: left;">Содержание вопроса</th>
+              </tr>
+          </thead>
+          <tbody id="questions-tbody">
+              <tr class="question-row">
+                  <td style="border: 1px solid #ccc; padding: 5px; text-align: center;" class="row-num">1</td>
+                  <td style="border: 1px solid #ccc; padding: 5px;"><%= text_field_tag "questions[][author]", "", placeholder: "ФИО члена ГЭК", style: "width: 100%; padding: 4px; box-sizing: border-box;" %></td>
+                  <td style="border: 1px solid #ccc; padding: 5px;"><%= text_field_tag "questions[][content]", "", placeholder: "Содержание вопроса", style: "width: 100%; padding: 4px; box-sizing: border-box;" %></td>
+              </tr>
+          </tbody>
+      </table>
+
+      <div style="margin-top: 10px; margin-bottom: 20px;">
+          <button type="button" onclick="addQuestionRow()" style="padding: 5px 10px; background: #6c757d; color: white; border: none; border-radius: 4px; cursor: pointer;">Добавить вопрос</button>
+          <button type="button" onclick="removeLastQuestionRow()" style="padding: 5px 10px; background: #dc3545; color: white; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;">Удалить последний вопрос</button>
+      </div>
+
+      <script>
+      function addQuestionRow() {
+          const tbody = document.getElementById('questions-tbody');
+          const rowCount = tbody.rows.length + 1;
+          const newRow = document.createElement('tr');
+          newRow.className = 'question-row';
+          newRow.innerHTML = `
+              <td style="border: 1px solid #ccc; padding: 5px; text-align: center;" class="row-num">${rowCount}</td>
+              <td style="border: 1px solid #ccc; padding: 5px;"><input type="text" name="questions[][author]" placeholder="ФИО члена ГЭК" style="width: 100%; padding: 4px; box-sizing: border-box;" /></td>
+              <td style="border: 1px solid #ccc; padding: 5px;"><input type="text" name="questions[][content]" placeholder="Содержание вопроса" style="width: 100%; padding: 4px; box-sizing: border-box;" /></td>
+          `;
+          tbody.appendChild(newRow);
+      }
+
+      function removeLastQuestionRow() {
+          const tbody = document.getElementById('questions-tbody');
+          if (tbody.rows.length > 1) {
+              tbody.deleteRow(tbody.rows.length - 1);
+          }
+      }
+      </script>
+
+      <b><li> РЕШЕНИЕ ГОСУДАРСТВЕННОЙ ЭКЗАМЕНАЦИОННОЙ КОМИССИИ </li></b>
+      <table>
+          <tbody>
+              <tr>
+                  <td>Оценка за защиту ВКР</td>
+                  <td>
+                      <input type="checkbox"> отлично
+                      <input type="checkbox"> хорошо
+                      <input type="checkbox"> удовлетворительно
+                      <input type="checkbox"> неудовлетворительно
+                  </td>
+              </tr>
+              <tr>
+                  <td>Присвоена квалификация (степень)</td>
+                  <td>
+                      <input type="checkbox"> бакалавр
+                      <input type="checkbox"> магистр
+                  </td>
+              </tr>
+              <tr>
+                  <td>Направление подготовки</td>
+                  <td><%= 
+                      first_student = cs.student
+                      code = first_student&.try(:specialty_code) || first_student&.try(:code) || "Код"
+                      "#{code}"
+                  %></td>
+              </tr>
+              <tr>
+                  <td>Профиль (направленность)</td>
+                  <td><%= cs.student&.try(:profile) || "Профиль" %></td>
+              </tr>
+              <tr>
+                  <td>Диплом</td>
+                  <td>
+                      <input type="checkbox"> с отличием
+                      <input type="checkbox"> без отличия
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+
+      <br>
+      <pre>
+          Председатель ГЭК: <%= 
+              chair = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Председатель" })
+              chair ? "#{chair.user&.last_name} #{chair.user&.first_name[0]}." : "___________________"
+          %> _______________________ /______________________/
+                                      (подпись)                        (ФИО)
+
+          Секретарь ГЭК:    <%= 
+              sec = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Секретарь" })
+              sec ? "#{sec.user&.last_name} #{sec.user&.first_name[0]}." : "___________________"
+          %> _______________________ /______________________/
+                                      (подпись)                        (ФИО)
+      </pre>
+      <pre>
+          Дата: «<%= @conference.date&.day %>» <%= @conference.date&.strftime("%B") %> <%= @conference.date&.year %> г.
+      </pre>
+
+      <%= link_to "Скачать Word", download_document_path, class: "btn btn-success", style: "background: #28a745; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;" %>
+    <% end %>
+  <% when "Протокол ГЭК" %>
+    <% if selected_cs.nil? %>
+        <p style="color: red;">Пожалуйста, выберите студента для формирования протокола ГЭК.</p>
+    <% else %>
+        <% cs = selected_cs %>
+        <% student = cs.student %>
+        <% chair = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Председатель" }) %>
+        <% gaks = @conference.conf_members.joins(:conf_role).where(conf_roles: { role: ["Член ГЭК", "Член комиссии"] }) %>
+        <% sec = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Секретарь" }) %>
+        <% chair = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Председатель" }) %>
+        <% gaks = @conference.conf_members.joins(:conf_role).where(conf_roles: { role: ["Член ГЭК", "Член комиссии"] }) %>
+        <% sec = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Секретарь" }) %>
+
+        <div style="margin-bottom: 40px; border-bottom: 2px dashed #ccc; padding-bottom: 30px;">
+            <center>
+                <h1>ПРОТОКОЛ № <%= params[:blank_number].presence || "_______" %></h1>
+                <h1>заседания Государственной экзаменационной комиссии ФГАОУ ВО «МГТУ «СТАНКИН»</h1>
+            </center>
+
+            <br>
+
+            <p align="right">
+                «<%= @conference.date&.day %>»
+                <%= @conference.date&.strftime("%B") %>
+                <%= @conference.date&.year %> г.
+            </p>
+
+            <p>
+                по рассмотрению выпускной квалификационной работы
+                <%= student&.try(:genitive_fio) ||
+                    [student&.last_name, student&.first_name, student&.patronymic].compact.join(" ") %>
+            </p>
+
+            <p>
+                на тему
+                <%= student&.theme&.try(:theme) || "Тема не указана" %>
+            </p>
+
+            <center><h2><i>ПРИСУТСТВОВАЛИ:</i></h2></center>
+
+            <p>
+                председатель ГЭК:
+                <%= chair ? [chair.user&.last_name, chair.user&.first_name, chair.user&.patronymic].compact.join(" ") : "Не назначен" %>
+            </p>
+
+            <p>
+                члены ГЭК:
+                <%= gaks.map { |g| [g.user&.last_name, g.user&.first_name, g.user&.patronymic].compact.join(" ") }.reject(&:blank?).join(", ") %>
+                <%= sec ? ", секретарь: #{[sec.user&.last_name, sec.user&.first_name, sec.user&.patronymic].compact.join(" ")}" : "" %>
+            </p>
+
+            <center><h2><i>ВЫПУСКНАЯ КВАЛИФИКАЦИОННАЯ РАБОТА ВЫПОЛНЕНА</i></h2></center>
+
+            <p>
+                под руководством:
+                <%= student&.voevoda&.fio || "Руководитель не указан" %>
+            </p>
+
+            <p>
+                при консультации:
+                <%= student&.consultant&.fio || "Консультант не указан" %>
+            </p>
+
+            <center><h2><i>В ГЭК ПРЕДСТАВЛЕНЫ СЛЕДУЮЩИЕ МАТЕРИАЛЫ:</i></h2></center>
+
+            <ol>
+                <li>
+                    Выпускная квалификационная работа на
+                    <%= student&.try(:main_list) || student&.try(:pages) || "..." %> листах;
+                </li>
+                <li>
+                    Приложения к ВКР на
+                    <%= student&.try(:add_list) || student&.try(:app_pages) || "..." %> листах;
+                </li>
+                <li>Отзыв руководителя ВКР;</li>
+                <li>Рецензия на ВКР.</li>
+            </ol>
+
+            <br>
+            <hr>
+
+            <p>
+                После сообщения о выполненной ВКР обучающемуся были заданы следующие вопросы:
+                _____________________________
+            </p>
+
+            <p>
+                Общая характеристика ответов на заданные вопросы:
+                _____________________________
+            </p>
+
+
+        <h2 style="text-align: center; font-style: italic;">РЕШЕНИЕ ГЭК</h2>
+
+        <p>
+        Признать, что обучающийся освоил(а) все компетенции, предусмотренные ОП ВО,
+        выполнил(а) и защитил(а) выпускную квалификационную работу.
+        </p>
+
+        <div style="text-align: right; margin: 20px 0;">
+        <label for="gek_grade">С оценкой:</label>
+        <input
+            type="text"
+            id="gek_grade"
+            name="gek_grade"
+            placeholder="Введите оценку"
+            style="width: 180px; padding: 5px;"
+        >
+        </div>
+
+        <p>
+        Присвоить
+        <input
+            type="text"
+            name="qualification"
+            placeholder="Квалификация"
+            style="width: 250px; padding: 5px;"
+        >
+        </p>
+
+        <p>
+        Квалификацию
+        <input
+            type="text"
+            name="degree"
+            placeholder="Например, бакалавра"
+            style="width: 200px; padding: 5px;"
+        >
+        по направлению подготовки
+        <%= student&.try(:code) || "Код" %>
+        <%= student&.try(:profile) || "Наименование направления" %>
+        </p>
+
+        <p>
+        Особые мнения членов комиссии
+        <input
+            type="text"
+            name="commission_opinions"
+            style="width: 350px; padding: 5px;"
+        >
+        </p>
+
+        <p>
+        Отметить, что
+        <input
+            type="text"
+            name="gek_notes"
+            style="width: 350px; padding: 5px;"
+        >
+        </p>
+
+        <p>Выдать диплом государственного образца:</p>
+
+        <label>
+        <input type="checkbox" name="diploma_with_honors" value="1">
+        С отличием
+        </label>
+
+        <label style="margin-left: 20px;">
+        <input type="checkbox" name="diploma_without_honors" value="1">
+        Без отличия
+        </label>
+
+        <div style="margin-top: 35px;">
+        <% chairman = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Председатель" })&.user %>
+        <% secretary = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Секретарь" })&.user %>
+
+        <p>
+            Председатель ГЭК:
+            <%= [chairman&.last_name, chairman&.first_name, chairman&.patronymic].compact.join(' ').presence || "______________________________" %>
+        </p>
+
+        <p>
+            Секретарь ГЭК:
+            <%= [secretary&.last_name, secretary&.first_name, secretary&.patronymic].compact.join(' ').presence || "______________________________" %>
+        </p>
+
+    <% end %>
+    <%= link_to "Скачать Word", download_document_path, class: "btn btn-success", style: "background: #28a745; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;" %>
+
+  <% when "Шаблон" %>
+    <p align="right"> В Учебно-методическое управление </p>
+    <p align="right"> ФГБОУ ВО "МГТУ "СТАНКИН" </p>
+    <center><b>Выписка из протоколов ГЭК</b></center>
+    <center><b>(граждане РФ и граждане, обучающиеся на условиях общего приема)</b></center>
+    
+    <table>
+        <tbody>
+            <tr>
+                <td>Дата защиты</td>
+                <td><b><%= @conference.date&.strftime("%d.%m.%Y") || "календарь (из протокола)" %></b></td>
+            </tr>
+            <tr>
+                <td>Кафедра(ы)</td>
+                <td><b><%= @conference.conference_students.map { |record| record.student&.try(:department).presence || record.student&.try(:cafedra).presence }.compact.uniq.join(", ").presence || "Не указана" %></b></td>
+            </tr>
+            <tr>
+                <td>Присвоена квалификация</td>
+                <td><b><%= @conference.conference_students.first&.student&.try(:qualification).presence || @conference.conference_students.first&.student&.try(:kind).presence || "Не указана" %></b></td>
+            </tr>
+            <tr>
+                <td>По направлению подготовки</td>
+                <td><b><%= [
+                @conference.conference_students.first&.student&.try(:specialty_code).presence || @conference.conference_students.first&.student&.try(:code).presence,
+                @conference.conference_students.first&.student&.try(:specialty_name).presence || @conference.conference_students.first&.student&.try(:codename).presence || @conference.conference_students.first&.student&.try(:profile).presence
+                ].compact.join(" ").presence || "Не указано" %></b></td>
+            </tr>
+            <tr>
+                <td>Председатель <br> (Фамилия И.О.)</td>
+                <td><b><%= 
+                    chair = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Председатель" })
+                    chair ? "#{chair.user&.last_name} #{chair.user&.first_name&.first}. #{chair.user&.patronymic&.first}." : "Не назначен"
+                %></b></td>
+            </tr>
+        </tbody>
+    </table>
+    
+    <table>
+        <thead>
+            <tr>
+                <th><center>№</center></th>
+                <th><center>Фамилия, имя, отчество</center></th>
+                <th><center>№<br>зачетной<br>книжки</center></th>
+                <th><center>Оценка</center></th>
+                <th><center>Дипл.<br>с<br>отлич.</center></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @conference.conference_students.each_with_index do |student_record, index| %>
+                <% st = student_record.student %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><center><%= st&.last_name %> <%= st&.first_name %> <%= st&.patronymic %></center></td>
+                    <td><center><%= st&.student_num || "Из БД" %></center></td>
+                    <td><center><%= st&.try(:grade) || "Из протокола" %></center></td>
+                    <td><center><%= st&.try(:honors) ? "с отличием" : "без отличия" %></center></td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+
+    <div class="signature-block">
+        <div class="signature-row">
+            <span class="title">Директор ЕД</span>
+            <span class="line">Митрофанов Артем Петрович</span>
+            <span class="note"></span>
+        </div>
+
+        <div class="signature-row">
+            <span class="title">Заведующий кафедрой ИС</span>
+            <span class="line">Бильчук Мария Викторовна</span>
+            <span class="note"></span>
+        </div>
+
+        <div class="signature-row">
+            <span class="title">Заведующий кафедрой ПМ</span>
+            <span class="line">Уварова Людмила Александровна</span>
+            <span class="note"></span>
+        </div>
+
+        <div class="signature-row">
+            <span class="title">Секретарь ГЭК</span>
+            <span class="line"><%= 
+                sec = @conference.conf_members.joins(:conf_role).find_by(conf_roles: { role: "Секретарь" })
+                sec ? "#{sec.user&.last_name} #{sec.user&.first_name&.first}. #{sec.user&.patronymic&.first}." : "_______________________"
+            %></span>
+            <span class="note"></span>
+        </div>
+    </div>
+    
+    <div style="margin-top: 20px;">
+        <%= link_to "Скачать Word", download_document_path, class: "btn btn-success", style: "background: #28a745; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;" %>
+    </div>
+
+
+  <% end %>
+</div>
+
+<div style="text-align: center; margin: 30px 0;">
+  <%= link_to "← Назад к списку конференций", root_path, style: "color: #007bff; text-decoration: none;" %>
+</div>
