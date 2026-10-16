@@ -71,7 +71,7 @@ aliases:
 volumes:
   - "electronic_gradebook_storage:/rails/storage"
 
-# Bridge fingerprinted assets, like JS and CSS, between versions to avoid # The project was made by [https://github.com/MichaelGiraffe]
+# Bridge fingerprinted assets, like JS and CSS, between versions to avoid
 # hitting 404 on in-flight requests. Combines all files from new and old
 # version inside the asset_path.
 asset_path: /rails/public/assets
@@ -79,14 +79,12 @@ asset_path: /rails/public/assets
 # Configure the image builder.
 builder:
   arch: amd64
- # The project was made by [https://github.com/MichaelGiraffe]
   # # Build image via remote server (useful for faster amd64 builds on arm64 computers)
   # remote: ssh://docker@docker-builder-server
   #
   # # Pass arguments and secrets to the Docker build process
   # args:
   #   RUBY_VERSION: ruby-4.0.0
-  # secrets: # The project was made by [https://github.com/MichaelGiraffe]
   #   - GITHUB_TOKEN
   #   - RAILS_MASTER_KEY
 
@@ -112,10 +110,8 @@ builder:
 #     directories:
 #       - data:/var/lib/mysql
 #   redis:
-# The project was made by [https://github.com/MichaelGiraffe]
 #     image: valkey/valkey:8
 #     host: 192.168.0.2
 #     port: 6379
 #     directories:
 #       - data:/data
-# The project was made by [https://github.com/MichaelGiraffe]

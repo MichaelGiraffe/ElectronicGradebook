@@ -1,5 +1,5 @@
-class AddPasswordDigestToUsers < ActiveRecord::Migration[8.1]# The project was made by [https://github.com/MichaelGiraffe]
-  def change# The project was made by [https://github.com/MichaelGiraffe]
-    add_column :users, :password_digest, :string, null: false# The project was made by [https://github.com/MichaelGiraffe]
-  end# The project was made by [https://github.com/MichaelGiraffe]
-end# The project was made by [https://github.com/MichaelGiraffe]
+class AddPasswordDigestToUsers < ActiveRecord::Migration[8.1]
+  def change
+    add_column :users, :password_digest, :string, null: false
+  end
+end

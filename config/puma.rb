@@ -18,7 +18,6 @@
 # traffic a given process can handle (throughput), but due to CRuby's
 # Global VM Lock (GVL) it has diminishing returns and will degrade the
 # response time (latency) of the application.
-# The project was made by [https://github.com/MichaelGiraffe]
 # The default is set to 3 threads as it's deemed a decent compromise between
 # throughput and latency for the average Rails application.
 #

@@ -4,13 +4,11 @@
 //   const { title, options } = await event.data.json()
 //   event.waitUntil(self.registration.showNotification(title, options))
 // })
-//  https://github.com/MichaelGiraffe
 // self.addEventListener("notificationclick", function(event) {
 //   event.notification.close()
 //   event.waitUntil(
 //     clients.matchAll({ type: "window" }).then((clientList) => {
 //       for (let i = 0; i < clientList.length; i++) {
-//         let client = clientList[i] https://github.com/MichaelGiraffe
 //         let clientPath = (new URL(client.url)).pathname
 //
 //         if (clientPath == event.notification.data.path && "focus" in client) {
@@ -24,4 +22,3 @@
 //     })
 //   )
 // })
-// The project was made by [https://github.com/MichaelGiraffe]

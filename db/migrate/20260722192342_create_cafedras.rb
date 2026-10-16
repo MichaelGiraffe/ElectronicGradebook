@@ -1,10 +1,9 @@
 class CreateCafedras < ActiveRecord::Migration[8.1]
-  def change# The project was made by [https://github.com/MichaelGiraffe]
+  def change
     create_table :cafedras do |t|
       t.string :name
-      # The project was made by [https://github.com/MichaelGiraffe]
+      
       t.timestamps
     end
   end
-end# The project was made by [https://github.com/MichaelGiraffe]
-# The project was made by [https://github.com/MichaelGiraffe]
+end

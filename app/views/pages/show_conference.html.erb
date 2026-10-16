@@ -9,7 +9,6 @@
     <p><strong>Кабинет:</strong> <%= @conference.room %></p>
   </div>
 
-  <!-- the project was made by [https://github.com/MichaelGiraffe] -->
   <div style="margin-bottom: 20px;">
     <h3>Члены комиссии (ВКР)</h3>
     <% if @conference.conf_members.empty? %>
@@ -26,7 +25,6 @@
     <% end %>
   </div>
 
-  <!-- the project was made by [https://github.com/MichaelGiraffe] -->
   <div style="margin-bottom: 10px;">
     <h3>Студенты, защищающие работы</h3>
     <% if @conference.conference_students.empty? %>
@@ -43,7 +41,6 @@
   </div>
 </div>
 
-<!-- the project was made by [https://github.com/MichaelGiraffe] -->
 <div style="max-width: 800px; margin: 20px auto; padding: 20px;">
   <hr style="margin: 20px 0;">
   
@@ -57,7 +54,6 @@
             <%= select_tag :document_type, options_for_select(["ГОСТ", "Протокол ГЭК", "Шаблон"], params[:document_type]), class: "form-control", style: "padding: 6px; border-radius: 4px; border: 1px solid #ccc;", onchange: "this.form.submit();" %>
         </div>
 
-        <!-- the project was made by [https://github.com/MichaelGiraffe] -->
         <div>
             <label><strong>Студент:</strong></label><br>
             <%= select_tag :student_id, 

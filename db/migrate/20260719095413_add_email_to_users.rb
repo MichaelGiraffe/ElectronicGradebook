@@ -1,6 +1,6 @@
-class AddEmailToUsers < ActiveRecord::Migration[8.1]# The project was made by [https://github.com/MichaelGiraffe]
-  def change# The project was made by [https://github.com/MichaelGiraffe]
-    add_column :users, :email, :string, null: false# The project was made by [https://github.com/MichaelGiraffe]
-    add_index :users, :email, unique: true# The project was made by [https://github.com/MichaelGiraffe]
-  end# The project was made by [https://github.com/MichaelGiraffe]
-end# The project was made by [https://github.com/MichaelGiraffe]
+class AddEmailToUsers < ActiveRecord::Migration[8.1]
+  def change
+    add_column :users, :email, :string, null: false
+    add_index :users, :email, unique: true
+  end
+end
