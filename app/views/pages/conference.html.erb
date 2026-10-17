@@ -1,10 +1,7 @@
 <h1>Создание документа защиты</h1>
 
 
-<%= form_with url: conference_path, method: :post do  |f| %>
-
-
-    <%= f.collection_select :conference_id, Conference.all, :id, :date %>
+<%= form_with url: conference_path(@conference), method: :post do |f| %>
 
     <%= select_tag :document_type,
     options_for_select([
@@ -75,19 +72,25 @@
 
                 <tr>
                     <td>Председатель</td>
-                    <td><%= "#{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Председатель"))&.user&.last_name} #{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Председатель"))&.user&.first_name} #{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Председатель"))&.user&.patronymic}" %></td>
+                    <td><%= @host %></td>
                 </tr>
 
-                <% @conference.conf_members.joins(:conf_role).where(conf_roles: { role: "Член ГЭК" }).each do |gak| %>
-                    <tr>
-                        <td>Член ГЭК</td>
-                        <td><%= gak.user&.last_name %></td>
-                    </tr>
-                <% end %>
+                <tr>
+                    <td>Член ГЭК</td>
+                    <td><%= @GAK1 %></td>
+                </tr>
+                <tr>
+                    <td>Член ГЭК</td>
+                    <td><%= @GAK2 %></td>
+                </tr>
+                <tr>
+                    <td>Член ГЭК</td>
+                    <td><%= @GAK3 %></td>
+                </tr>
 
                 <tr>
                     <td>Секретарь ГЭК</td>
-                    <td><%= "#{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Секретарь"))&.user&.last_name} #{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Секретарь"))&.user&.first_name} #{@conference.conf_members.find_by(conf_role: ConfRole.find_by(role: "Секретарь"))&.user&.patronymic}" %></td>
+                    <td><%= @secretary %></td>
                 </tr>
             </tbody>
         </table>
@@ -143,7 +146,7 @@
 
         <hr>
         <b><center>ОБОРОТНАЯ СТОРОНА БЛАНКА</center></b>
-        <b><li> ВОПРОСЫ, ЗАДАННЫЕ ЧЛЕНАМИ ГЭК (реализую с добавлением бд, динамическая таблица!) </li></b>
+        <b><li> ВОПРОСЫ, ЗАДАННЫЕ ЧЛЕНАМИ ГЭК </li></b>
         <%# тут таблица должна быть динамической, но пока такой возможности нет%>
         <table>
             <%# заголовки %>
@@ -184,7 +187,7 @@
         </table>
 
         <b><li> ХАРАКТЕРИСТИКА ОТВЕТОВ ЗАЩИЩАЮЩЕГОСЯ (получше узнать как должно быть реализовано) </li></b>
-        <u>Что это вообще значит? Тут должны быть ответы которые он сказал или их описание что он молодец ответил на то-то?</u>
+        <u>вопрос-ответ</u>
 
         <b><li> РЕШЕНИЕ ГОСУДАРСТВЕННОЙ ЭКЗАМЕНАЦИОННОЙ КОМИССИИ </li></b>
         <table>
@@ -303,23 +306,23 @@
         <tbody>
             <tr>
                 <td>Дата защиты</td>
-                <td><b><cur>календарь (из протокола)</cur></b></td>
+                <td><b><cur>«<%= Time.now.day %>»</cur></b></td>
             </tr>
             <tr>
                 <td>Кафедра(ы)</td>
-                <td><b><cur>Из БД (может быть несколько)</cur></b></td>
+                <td><b><cur>...</cur></b></td>
             </tr>
             <tr>
                 <td>Присвоена квалификация</td>
-                <td><b><cur>Из БД (бакалавр или магистр йода). Ну в бд пусть по 1 выступающему определяться и будет</cur></b></td>
+                <td><b><cur><%= @kind %></cur></b></td>
             </tr>
             <tr>
                 <td>По направлению подготовки</td>
-                <td><b><cur>Из БД (че?)</cur></b></td>
+                <td><b><cur><%= @profile %></cur></b></td>
             </tr>
             <tr>
                 <td>Председатель <br> (Фамилия И.О.)</td>
-                <td><b><cur>Из БД <%= @host %></cur></b></td>
+                <td><b><cur><%= @host %></cur></b></td>
             </tr>
         </tbody>
     </table>
@@ -343,67 +346,56 @@
         <tbody>
             <tr>
                 <td>1</td>
-                <td><center>Из БД</center></td>
-                <td><center>Из БД</center></td>
-                <td><center>Из протокола</center></td>
-                <td><center>Из протокола</center></td>
-                <td><center>Из БД</center></td>
-                <td><center>Из БД</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
             </tr>
 
             <tr>
                 <td>2</td>
-                <td><center>Из БД</center></td>
-                <td><center>Из БД</center></td>
-                <td><center>Из протокола</center></td>
-                <td><center>Из протокола</center></td>
-                <td><center>Из БД</center></td>
-                <td><center>Из БД</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
             </tr>
 
             <tr>
                 <td>3</td>
-                <td><center>Из БД</center></td>
-                <td><center>Из БД</center></td>
-                <td><center>Из протокола</center></td>
-                <td><center>Из протокола</center></td>
-                <td><center>Из БД</center></td>
-                <td><center>Из БД</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
+                <td><center>...</center></td>
             </tr>
 
-            <% @conference.conference_students.each do |student| %>
-                <tr>
-                    <td>Student</td>
-                    <td><center><%= student.student&.last_name %> <%= student.student&.first_name %> <%= student.student&.patronymic %></center></td>
-                    <td><center><%= student.student&.student_num %></center></td>
-                </tr>
-            <% end %>
         </tbody>
     </table>
 
     <div class="signature-block">
         <div class="signature-row">
             <span class="title">Директор ЕД</span>
-            <span class="line"><%= @nope %></span>
-            <span class="note">/ Из БД</span>
+            <span class="line">Митрофанов Артем Петрович</span>
         </div>
 
         <div class="signature-row">
             <span class="title">Заведующий кафедрой ИС</span>
-            <span class="line"><%= @nope %></span>
-            <span class="note">/ Из БД</span>
+            <span class="line">Бильчук Мария Викторовна</span>
         </div>
 
         <div class="signature-row">
             <span class="title">Заведующий кафедрой ПМ</span>
-            <span class="line"><%= @nope %></span>
-            <span class="note">/ Из БД</span>
+            <span class="line">Уварова Людмила Александровна</span>
         </div>
 
         <div class="signature-row">
             <span class="title">Секретарь ГЭК</span>
             <span class="line"><%= @secretary %></span>
-            <span class="note">/ Из БД</span>
         </div>
     </div>
     <%= link_to "Скачать Word", download_document_path %>
@@ -415,5 +407,5 @@
 
 
 
-<%# эта команда может рано или поздно помочь %>
+<%# эта команда может рано или поздно помочь, а пока она записана в комментарии %>
 <%#= case @grade.to_i when 45..54 then "отлично" when 35..44 then "хорошо" when 25..34 then "удовлетворительно" when 0..24 then "неудовлетворительно" else "проверьте число" end %>

@@ -302,7 +302,7 @@
           Дата: «<%= @conference.date&.day %>» <%= @conference.date&.strftime("%B") %> <%= @conference.date&.year %> г.
       </pre>
 
-      <%= link_to "Скачать Word", download_document_path, class: "btn btn-success", style: "background: #28a745; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;" %>
+      <%#= link_to "Скачать Word", download_document_path, class: "btn btn-success", style: "background: #28a745; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;" %>
     <% end %>
   <% when "Протокол ГЭК" %>
     <% if selected_cs.nil? %>
@@ -482,7 +482,7 @@
         </p>
 
     <% end %>
-    <%= link_to "Скачать Word", download_document_path, class: "btn btn-success", style: "background: #28a745; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;" %>
+    <%#= link_to "Скачать Word", download_document_path, class: "btn btn-success", style: "background: #28a745; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;" %>
 
   <% when "Шаблон" %>
     <p align="right"> В Учебно-методическое управление </p>
@@ -575,7 +575,7 @@
     </div>
     
     <div style="margin-top: 20px;">
-        <%= link_to "Скачать Word", download_document_path, class: "btn btn-success", style: "background: #28a745; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;" %>
+        <%#= link_to "Скачать Word", download_conference_report_path(@conference, document_type: doc_type, student_id: params[:student_id], blank_number: params[:blank_number]), class: "btn btn-success", style: "background: #28a745; color: white; padding: 8px 16px; border-radius: 4px; text-decoration: none;" %>
     </div>
 
 

@@ -13,7 +13,6 @@ class PagesController < ApplicationController
     def create
         @document_type = params[:document_type]
 
-        @conference = Conference.find(params[:conference_id])
         #тут примерно набросок профессий, потом заменю
         @fio = params[:fio]#фио студента
 
