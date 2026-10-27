@@ -10,6 +10,8 @@ Things you may want to cover:
     ruby 4.0.0->рекомендуемая версия. Можно использовать ruby 4.0.7
 * Database initialization
     в ruby (ЯП) в папке bin нужно передать 2 файла БД SQLite: sqlite3.def и sqlite3.dll
+
+  далее в консоли
 * System dependencies
     bundle install
 * Database creation
